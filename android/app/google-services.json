@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "896545342776",
+    "firebase_url": "https://tractal-a60b4-default-rtdb.firebaseio.com",
+    "project_id": "tractal-a60b4",
+    "storage_bucket": "tractal-a60b4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896545342776:android:6148ded42b779afd1e2dcd",
+        "android_client_info": {
+          "package_name": "com.tractal.game.tictactic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoEH89mFDVqIaVU0WFjAjfd6rnBrtJ7Wk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
