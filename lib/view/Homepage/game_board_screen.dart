@@ -59,6 +59,22 @@ class _GameBoardScreenState extends State<GameBoardScreen> with TickerProviderSt
         final isDraw = room.isDraw();
         final gameOver = winner != null || isDraw;
 
+        final ShowMessaage = room.chat.last;
+        final isMe = ShowMessaage.uid == myUid;
+        final isPlayer = room.players.containsKey(ShowMessaage.uid);
+        final symbol = room.players[ShowMessaage.uid];
+
+        String senderLabel;
+        if (isMe) {
+          senderLabel = "You";
+        } else if (isPlayer && symbol != null) {
+          senderLabel = "Player $symbol";
+        } else {
+          senderLabel = "Viewer";
+        }
+
+        // Check if it's just an emoji (short text with emoji chars)
+        final isEmoji = ShowMessaage.text.length <= 4;
         return Scaffold(
           body: Container(
             width: double.infinity,
@@ -75,18 +91,62 @@ class _GameBoardScreenState extends State<GameBoardScreen> with TickerProviderSt
               ),
             ),
             child: SafeArea(
-              child: Column(
+              child: Stack(
                 children: [
-                  // Top bar
-                  _buildTopBar(context, room, isViewerMode),
+                  Column(
+                    children: [
+                      // Top bar
+                      _buildTopBar(context, room, isViewerMode),
 
-                  Expanded(
-                    child: _showChat
-                        ? _buildChatPanel(context, room, myUid)
-                        : _buildGameView(
-                            context, room, isViewerMode, myUid, mySymbol,
-                            isMyTurn, winner, isDraw, gameOver),
+                      Expanded(
+                        child: _showChat
+                            ? _buildChatPanel(context, room, myUid)
+                            : _buildGameView(
+                                context, room, isViewerMode, myUid, mySymbol,
+                                isMyTurn, winner, isDraw, gameOver),
+                      ),
+                    ],
                   ),
+                  Positioned(
+                    top: 20,
+                    right: 50,
+                    child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 3),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isEmoji ? 8 : 12,
+                      vertical: isEmoji ? 4 : 8,
+                    ),
+                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+                    decoration: BoxDecoration(
+                      color: isMe
+                          ? Colors.cyan.withAlpha(40)
+                          : Colors.white.withAlpha(15),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isMe ? Colors.cyan.withAlpha(60) : Colors.white.withAlpha(20),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          senderLabel,
+                          style: TextStyle(
+                            color: isMe ? Colors.cyan : Colors.white54,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          ShowMessaage.text,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: isEmoji ? 40 : 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),)
                 ],
               ),
             ),
